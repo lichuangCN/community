@@ -13,12 +13,14 @@ public interface UserMapper {
 
     /**
      * 登录成功时插入用户信息
+     *
      * @param user
      */
     void insert(User user);
 
     /**
      * 根据token检索用户
+     *
      * @param token
      * @return
      */

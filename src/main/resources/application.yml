@@ -1,0 +1,24 @@
+server:
+  port: 8088
+# Github用户登录
+github.client.id: 009778391ff7a0e735d1
+github.client.secret: b0121153567caca523f269caaa3b2962193bf098
+github.redirect.uri: http://localhost:8088/callback
+
+spring:
+  # mysql数据库
+  datasource:
+    # driverClassName: com.mysql.jdbc.Driver
+    driverClass: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: root
+  # 数据库版本控制
+  flyway:
+    locations: classpath:/db/migration
+# 集成Mybatis环境
+mybatis:
+  # 别名扫描包
+  type-aliases-package: vex.muzhi.community.model
+  # 加载Mybatis映射文件
+  mapper-locations: classpath:mapper/*Mapper.xml
