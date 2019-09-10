@@ -4,25 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="vex.muzhi.community.mapper.UserMapper">
 
-    <!--实体表和数据库表的映射-->
-    <resultMap id="userMap" type="User">
-        <id column="id" property="id" javaType="Integer"/>
-        <result column="account_id" property="accountId" javaType="String"/>
-        <result column="name" property="name" javaType="String"/>
-        <result column="token" property="token" javaType="String"/>
-        <result column="gmt_create" property="gmtCreate" javaType="Long"/>
-        <result column="gmt_modified" property="gmtModified" javaType="Long"/>
-    </resultMap>
-
     <!--插入用户信息-->
     <insert id="insert" parameterType="User">
         insert into
-        user(name,account_id,token,gmt_create,gmt_modified)
-        values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})
+        user(name,account_id,token,gmt_create,gmt_modified,avatar_url)
+        values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})
     </insert>
 
-    <!--检索用户信息-->
-    <select id="findByToken" parameterType="String" resultMap="userMap">
+    <!--根据token检索用户信息-->
+    <select id="findByToken" parameterType="String" resultType="User">
         select * from user where token = #{token}
+    </select>
+
+    <!--根据id检索用户信息-->
+    <select id="findById" parameterType="Integer" resultType="User">
+        select * from user where id = #{id}
     </select>
 </mapper>

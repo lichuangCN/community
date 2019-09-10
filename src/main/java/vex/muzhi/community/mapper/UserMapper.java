@@ -25,4 +25,11 @@ public interface UserMapper {
      * @return
      */
     User findByToken(String token);
+
+    /**
+     * 根据id检索用户
+     * @param creator
+     * @return
+     */
+    User findById(Integer creator);
 }

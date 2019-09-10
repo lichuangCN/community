@@ -1,15 +1,16 @@
-package vex.muzhi.community.model;
+package vex.muzhi.community.dto;
 
 import lombok.Data;
+import vex.muzhi.community.model.User;
 
 /**
  * Author: lichuang
- * Date: Create in 21:00 2019/9/9
- * Description: 提交的问题的实体类
+ * Date: Create in 20:48 2019/9/10
+ * Description: 问题数据传输模型
  */
 
 @Data
-public class Question {
+public class QuestionDTO {
 
     private Integer id;
     private String title;
@@ -21,5 +22,6 @@ public class Question {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+    private User user;
 
 }

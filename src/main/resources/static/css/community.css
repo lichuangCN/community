@@ -19,3 +19,12 @@ body{
 .ul-publish {
     margin-left: 15px;
 }
+.media-object {
+    width: 40px;
+    height: 40px;
+}
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
