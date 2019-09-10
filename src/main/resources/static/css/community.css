@@ -1,0 +1,21 @@
+body{
+    background-color: #efefef;
+}
+.main{
+    background-color: white;
+    margin: 30px;
+}
+.btn-publish{
+    float: right;
+    margin-bottom: 15px;
+}
+.btn-publish-div{
+    float: right;
+}
+.ul-publish {
+    margin: 0;
+    padding: 0;
+}
+.ul-publish {
+    margin-left: 15px;
+}

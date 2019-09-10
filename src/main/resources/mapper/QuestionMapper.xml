@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vex.muzhi.community.mapper.QuestionMapper">
+
+    <!--实体表和数据库表的映射-->
+
+    <!--插入问题-->
+    <insert id="insert" parameterType="Question">
+        insert into
+        question(title,description,gmt_create,gmt_modified,creator,tag)
+        values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})
+    </insert>
+
+</mapper>
