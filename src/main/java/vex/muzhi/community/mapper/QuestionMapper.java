@@ -1,6 +1,7 @@
 package vex.muzhi.community.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import vex.muzhi.community.model.Question;
 
 import java.util.List;
@@ -15,13 +16,24 @@ public interface QuestionMapper {
 
     /**
      * 新增问题
+     *
      * @param question
      */
     void insert(Question question);
 
     /**
-     * 获得问题列表
+     * 问题列表(分页)
+     *
+     * @param offset
+     * @param size
      * @return
      */
-    List<Question> findQuestionList();
+    List<Question> findQuestionList(@Param("offset") Integer offset, @Param("size") Integer size);
+
+    /**
+     * 问题总数
+     *
+     * @return
+     */
+    Integer count();
 }

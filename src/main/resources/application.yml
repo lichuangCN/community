@@ -22,6 +22,7 @@ mybatis:
   type-aliases-package: vex.muzhi.community.model
   # 加载Mybatis映射文件
   mapper-locations: classpath:mapper/*Mapper.xml
+
   configuration:
-    # 数据库字段转为驼峰规则
+    # 数据库字段映射为驼峰规则属性
     map-underscore-to-camel-case: true

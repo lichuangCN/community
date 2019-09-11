@@ -14,13 +14,4 @@ import java.util.List;
 @SpringBootTest
 public class CommunityApplicationTests {
 
-    @Autowired
-    private QuestionMapper questionMapper;
-
-    @Test
-    public void contextLoads() {
-        List<Question> questionList = questionMapper.findQuestionList();
-        System.out.println(questionList.size());
-    }
-
 }

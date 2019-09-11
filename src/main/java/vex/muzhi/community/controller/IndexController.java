@@ -4,16 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import vex.muzhi.community.dto.QuestionDTO;
-import vex.muzhi.community.mapper.QuestionMapper;
+import org.springframework.web.bind.annotation.RequestParam;
+import vex.muzhi.community.dto.PaginationDTO;
 import vex.muzhi.community.mapper.UserMapper;
-import vex.muzhi.community.model.Question;
 import vex.muzhi.community.model.User;
 import vex.muzhi.community.service.QuestionService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * Author: lichuang
@@ -31,7 +29,9 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model) {
+                        Model model,
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "1") Integer size) {
         // 从请求中的cookie中获取带有token的cookie, 判断此用户之前是否登陆过
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length > 0) {
@@ -50,8 +50,8 @@ public class IndexController {
         }
 
         // 问题内容以及问题发起人信息列表
-        List<QuestionDTO> questionList = questionService.getQuestionList();
-        model.addAttribute("questions",questionList);
+        PaginationDTO pagination = questionService.getQuestionList(page, size);
+        model.addAttribute("pagination", pagination);
         return "index";
     }
 }

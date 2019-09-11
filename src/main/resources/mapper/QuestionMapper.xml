@@ -11,8 +11,13 @@
         values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})
     </insert>
 
-    <!--获得问题列表-->
+    <!--问题列表(分页)-->
     <select id="findQuestionList" resultType="Question">
-        select * from question
+        select * from question limit #{offset},#{size}
+    </select>
+
+    <!--问题总数-->
+    <select id="count" resultType="Integer">
+        select count(1) from question
     </select>
 </mapper>
