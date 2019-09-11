@@ -7,8 +7,8 @@
     <!--插入用户信息-->
     <insert id="insert" parameterType="User">
         insert into
-        user(name,account_id,token,gmt_create,gmt_modified,avatar_url)
-        values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})
+        user(name,account_id,bio,token,gmt_create,gmt_modified,avatar_url)
+        values(#{name},#{accountId},#{bio},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})
     </insert>
 
     <!--根据token检索用户信息-->
