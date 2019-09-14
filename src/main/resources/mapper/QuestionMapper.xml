@@ -13,11 +13,26 @@
 
     <!--问题列表(分页)-->
     <select id="findQuestionList" resultType="Question">
-        select * from question limit #{offset},#{size}
+        select * from question
+        limit #{offset},#{size}
     </select>
 
     <!--问题总数-->
     <select id="count" resultType="Integer">
         select count(1) from question
+        <where>
+            <if test="userId != null">creator=#{userId}</if>
+        </where>
+    </select>
+    <!--某位用户的问题总数-->
+    <select id="countByUserId" resultType="Integer">
+        select count(1) from question
+        where creator = #{userId}
+    </select>
+    <!--某位用户的问题列表(分页)-->
+    <select id="findQuestionListByUserId" resultType="Question">
+        select * from question
+        where creator = #{userId}
+        limit #{offset},#{size}
     </select>
 </mapper>

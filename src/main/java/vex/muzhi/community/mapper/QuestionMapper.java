@@ -28,12 +28,33 @@ public interface QuestionMapper {
      * @param size
      * @return
      */
-    List<Question> findQuestionList(@Param("offset") Integer offset, @Param("size") Integer size);
+    List<Question> findQuestionList(@Param("offset") Integer offset,
+                                    @Param("size") Integer size);
 
     /**
-     * 问题总数
+     * 所有问题总数
      *
      * @return
      */
     Integer count();
+
+    /**
+     * 某位用户问题总数
+     *
+     * @param userId
+     * @return
+     */
+    Integer countByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 某位用户的发布的问题列表
+     *
+     * @param userId
+     * @param offset
+     * @param size
+     * @return
+     */
+    List<Question> findQuestionListByUserId(@Param("userId") Integer userId,
+                                    @Param("offset") Integer offset,
+                                    @Param("size") Integer size);
 }

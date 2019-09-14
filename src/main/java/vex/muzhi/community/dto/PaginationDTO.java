@@ -29,7 +29,7 @@ public class PaginationDTO {
     // 总页码
     private Integer totalPage;
 
-    public void setPagination(Integer totalPage, Integer page, Integer size) {
+    public void setPagination(Integer totalPage, Integer page) {
 
         // 总页码
         this.totalPage = totalPage;
