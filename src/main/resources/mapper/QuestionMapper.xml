@@ -11,6 +11,12 @@
         values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})
     </insert>
 
+    <!--更新问题-->
+    <update id="update" parameterType="Question">
+        update question set title=#{title},description=#{description},gmt_modified=#{gmtModified},tag=#{tag}
+        where id=#{id};
+    </update>
+    
     <!--问题列表(分页)-->
     <select id="findQuestionList" resultType="Question">
         select * from question

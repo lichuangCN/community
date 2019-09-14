@@ -124,9 +124,29 @@ public class QuestionService {
         // 问题信息
         Question question = questionMapper.findById(id);
         QuestionDTO questionDTO = new QuestionDTO();
-        BeanUtils.copyProperties(question,questionDTO);
+        BeanUtils.copyProperties(question, questionDTO);
         // 检索问题的发布人
         questionDTO.setUser(userMapper.findById(question.getCreator()));
         return questionDTO;
     }
+
+    /**
+     * 创建或更新问题
+     *
+     * @param question
+     */
+    public void createOrUpdate(Question question) {
+
+        if (question.getId() == null) {
+            // 问题不存在，创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.insert(question);
+        } else {
+            // 问题存在，更新
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.update(question);
+        }
+    }
+
 }

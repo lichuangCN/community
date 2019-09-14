@@ -65,4 +65,10 @@ public interface QuestionMapper {
      * @return
      */
     Question findById(@Param("id") Integer id);
+
+    /**
+     * 更新信息
+     * @param question
+     */
+    void update(Question question);
 }
