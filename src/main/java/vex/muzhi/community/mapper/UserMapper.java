@@ -1,6 +1,7 @@
 package vex.muzhi.community.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import vex.muzhi.community.model.User;
 
 /**
@@ -28,8 +29,24 @@ public interface UserMapper {
 
     /**
      * 根据id检索用户
+     *
      * @param creator
      * @return
      */
     User findById(Integer creator);
+
+    /**
+     * 根据accountId检索用户
+     *
+     * @param accountId
+     * @return
+     */
+    User findByAccountId(@Param("accountId") String accountId);
+
+    /**
+     * 更新信息
+     *
+     * @param user
+     */
+    void update(User user);
 }

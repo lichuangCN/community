@@ -113,4 +113,20 @@ public class QuestionService {
 
         return paginationDTO;
     }
+
+    /**
+     * 获取单个问题信息
+     *
+     * @param id 问题id
+     * @return
+     */
+    public QuestionDTO getQuestionById(Integer id) {
+        // 问题信息
+        Question question = questionMapper.findById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        // 检索问题的发布人
+        questionDTO.setUser(userMapper.findById(question.getCreator()));
+        return questionDTO;
+    }
 }

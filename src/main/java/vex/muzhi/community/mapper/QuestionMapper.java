@@ -55,6 +55,14 @@ public interface QuestionMapper {
      * @return
      */
     List<Question> findQuestionListByUserId(@Param("userId") Integer userId,
-                                    @Param("offset") Integer offset,
-                                    @Param("size") Integer size);
+                                            @Param("offset") Integer offset,
+                                            @Param("size") Integer size);
+
+    /**
+     * 查询指定的问题信息
+     *
+     * @param id 问题id
+     * @return
+     */
+    Question findById(@Param("id") Integer id);
 }

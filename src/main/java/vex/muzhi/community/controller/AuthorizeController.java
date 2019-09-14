@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vex.muzhi.community.dto.AccessTokenDTO;
 import vex.muzhi.community.dto.GithubUser;
-import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.User;
 import vex.muzhi.community.provider.GithubProvider;
+import vex.muzhi.community.service.UserService;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public class AuthorizeController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     /**
      * @param code     Github返回的授权码
@@ -63,10 +64,8 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setBio(githubUser.getBio());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             // 写入cookie
             response.addCookie(new Cookie("token", token));
             return "redirect:/";
@@ -74,5 +73,16 @@ public class AuthorizeController {
             // 登录失败，重新登录
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        // 移除用户
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

@@ -20,4 +20,16 @@
     <select id="findById" parameterType="Integer" resultType="User">
         select * from user where id = #{id}
     </select>
+
+    <!--根据account_id检索用户-->
+    <select id="findByAccountId" resultType="User">
+        select * from user where account_id = #{accountId};
+    </select>
+
+    <!--更新用户-->
+    <update id="update" parameterType="User">
+        update user 
+        set name=#{name},bio=#{bio},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} 
+        where account_id=#{accountId}
+    </update>
 </mapper>
