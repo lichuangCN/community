@@ -36,7 +36,7 @@ public class ProfileController {
                           Model model,
                           HttpServletRequest request,
                           @RequestParam(name = "page", defaultValue = "1") Integer page,
-                          @RequestParam(name = "size", defaultValue = "8") Integer size) {
+                          @RequestParam(name = "size", defaultValue = "5") Integer size) {
 
         // 如果当前用户未登录
         User user = (User) request.getSession().getAttribute("user");

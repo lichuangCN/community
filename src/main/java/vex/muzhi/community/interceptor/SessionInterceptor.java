@@ -6,10 +6,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.User;
+import vex.muzhi.community.model.UserExample;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Author: lichuang
@@ -31,10 +33,12 @@ public class SessionInterceptor implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) {
                     // 此用户曾经登陆成功
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size() != 0) {
                         // 将此用户信息存放在session中
-                        request.getSession().setAttribute("user", user);
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }

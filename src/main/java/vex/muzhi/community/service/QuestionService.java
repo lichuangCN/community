@@ -1,5 +1,6 @@
 package vex.muzhi.community.service;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import vex.muzhi.community.dto.QuestionDTO;
 import vex.muzhi.community.mapper.QuestionMapper;
 import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.Question;
+import vex.muzhi.community.model.QuestionExample;
 import vex.muzhi.community.model.User;
 
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class QuestionService {
     public PaginationDTO getQuestionList(Integer page, Integer size) {
 
         // 问题总数
-        Integer totalCount = questionMapper.count();
+        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -54,10 +56,11 @@ public class QuestionService {
         // 查询的起始位置
         Integer offset = size * (page - 1);
         // 问题列表
-        List<Question> questionList = questionMapper.findQuestionList(offset, size);
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(offset,size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
-            User user = userMapper.findById(question.getCreator());
+            // 根据问题发布人的id查询此发布人的信息
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             // 复制question的值到questionDTO中
             BeanUtils.copyProperties(question, questionDTO);
@@ -80,7 +83,10 @@ public class QuestionService {
     public PaginationDTO getQuestionListByUserId(Integer userId, Integer page, Integer size) {
 
         // 用户的问题总数
-        Integer totalCount = questionMapper.countByUserId(userId);
+        QuestionExample questionExample = new QuestionExample();
+        // 添加条件：用户(问题发布人)id
+        questionExample.createCriteria().andCreatorEqualTo(userId);
+        Integer totalCount = (int)questionMapper.countByExample(questionExample);
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -98,10 +104,13 @@ public class QuestionService {
         // 查询的起始位置
         Integer offset = size * (page - 1);
         // 某位用户的问题列表
-        List<Question> questionList = questionMapper.findQuestionListByUserId(userId, offset, size);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria()
+                .andCreatorEqualTo(userId);
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example,new RowBounds(offset,size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
-            User user = userMapper.findById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             // 复制question的值到questionDTO中
             BeanUtils.copyProperties(question, questionDTO);
@@ -122,11 +131,12 @@ public class QuestionService {
      */
     public QuestionDTO getQuestionById(Integer id) {
         // 问题信息
-        Question question = questionMapper.findById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         // 检索问题的发布人
-        questionDTO.setUser(userMapper.findById(question.getCreator()));
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
+        questionDTO.setUser(user);
         return questionDTO;
     }
 
@@ -145,7 +155,10 @@ public class QuestionService {
         } else {
             // 问题存在，更新
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.update(question);
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria()
+                    .andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(question, questionExample);
         }
     }
 

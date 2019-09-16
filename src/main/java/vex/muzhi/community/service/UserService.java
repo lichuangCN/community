@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.User;
+import vex.muzhi.community.model.UserExample;
+
+import java.util.List;
 
 /**
  * Author: lichuang
@@ -18,21 +21,28 @@ public class UserService {
 
     /**
      * 用户使用Github账户登录时，创建新用户或更新旧用户信息
+     *
      * @param user
      */
     public void createOrUpdate(User user) {
 
-        User dbUser = userMapper.findByAccountId(user.getAccountId());
-
-        if (dbUser == null) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0) {
             // 如果用户之前不存在，插入
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+            userMapper.insertSelective(user);
         } else {
             // 若之前存在，更新
-            user.setGmtModified(System.currentTimeMillis());
-            userMapper.update(user);
+            User dbUser = users.get(0);
+            dbUser.setName(user.getName());
+            dbUser.setAvatarUrl(user.getAvatarUrl());
+            dbUser.setBio(user.getBio());
+            dbUser.setToken(user.getToken());
+            dbUser.setGmtModified(System.currentTimeMillis());
+            userMapper.updateByPrimaryKeySelective(dbUser);
         }
     }
 }
