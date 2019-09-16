@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>愿兮</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/community.css"/>
+    <script type="application/javascript" src="/js/jquery.js"></script>
+    <script type="application/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>出错了!</h1>
+            <p th:if="${message!=null}" th:text="${message}"></p>
+            <a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

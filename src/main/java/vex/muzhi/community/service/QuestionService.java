@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vex.muzhi.community.dto.PaginationDTO;
 import vex.muzhi.community.dto.QuestionDTO;
+import vex.muzhi.community.exception.CustomizeErrorCode;
+import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.mapper.QuestionMapper;
 import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.Question;
@@ -39,7 +41,7 @@ public class QuestionService {
     public PaginationDTO getQuestionList(Integer page, Integer size) {
 
         // 问题总数
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -56,7 +58,7 @@ public class QuestionService {
         // 查询的起始位置
         Integer offset = size * (page - 1);
         // 问题列表
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(offset,size));
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
             // 根据问题发布人的id查询此发布人的信息
@@ -86,7 +88,7 @@ public class QuestionService {
         QuestionExample questionExample = new QuestionExample();
         // 添加条件：用户(问题发布人)id
         questionExample.createCriteria().andCreatorEqualTo(userId);
-        Integer totalCount = (int)questionMapper.countByExample(questionExample);
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -107,7 +109,7 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         example.createCriteria()
                 .andCreatorEqualTo(userId);
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example,new RowBounds(offset,size));
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -132,6 +134,9 @@ public class QuestionService {
     public QuestionDTO getQuestionById(Integer id) {
         // 问题信息
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         // 检索问题的发布人
@@ -158,7 +163,10 @@ public class QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(question, questionExample);
+            int updated = questionMapper.updateByExampleSelective(question, questionExample);
+            if (updated != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 
