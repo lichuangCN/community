@@ -8,6 +8,7 @@ import vex.muzhi.community.dto.PaginationDTO;
 import vex.muzhi.community.dto.QuestionDTO;
 import vex.muzhi.community.exception.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
+import vex.muzhi.community.mapper.QuestionExtMapper;
 import vex.muzhi.community.mapper.QuestionMapper;
 import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.Question;
@@ -27,6 +28,9 @@ public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -170,4 +174,15 @@ public class QuestionService {
         }
     }
 
+    /**
+     * 阅读数累加
+     *
+     * @param id
+     */
+    public void increaseView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.increaseView(question);
+    }
 }

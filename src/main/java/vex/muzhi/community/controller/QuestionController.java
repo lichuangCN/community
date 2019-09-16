@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import vex.muzhi.community.dto.QuestionDTO;
-import vex.muzhi.community.mapper.QuestionMapper;
 import vex.muzhi.community.service.QuestionService;
 
 /**
@@ -25,7 +24,9 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Integer id,
                            Model model) {
         QuestionDTO questionDTO = questionService.getQuestionById(id);
-        model.addAttribute("question",questionDTO);
+        // 累加阅读数功能
+        questionService.increaseView(id);
+        model.addAttribute("question", questionDTO);
         return "question";
     }
 }
