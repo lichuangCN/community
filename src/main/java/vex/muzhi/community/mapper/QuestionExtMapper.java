@@ -1,10 +1,9 @@
 package vex.muzhi.community.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import vex.muzhi.community.model.Question;
 
-@Mapper
+// @Mapper
 public interface QuestionExtMapper {
 
     /**
@@ -14,4 +13,11 @@ public interface QuestionExtMapper {
      * @return
      */
     int increaseView(@Param("record") Question record);
+
+    /**
+     * 回复数增加
+     * @param record
+     * @return
+     */
+    int increaseCommentCount(@Param("record") Question record);
 }

@@ -33,7 +33,7 @@ public class UserService {
             // 如果用户之前不存在，插入
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            userMapper.insertSelective(user);
+            userMapper.insert(user);
         } else {
             // 若之前存在，更新
             User dbUser = users.get(0);

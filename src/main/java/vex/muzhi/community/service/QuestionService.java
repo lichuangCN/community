@@ -17,6 +17,7 @@ import vex.muzhi.community.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Author: lichuang
@@ -63,19 +64,16 @@ public class QuestionService {
         Integer offset = size * (page - 1);
         // 问题列表
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
-        for (Question question : questionList) {
-            // 根据问题发布人的id查询此发布人的信息
-            User user = userMapper.selectByPrimaryKey(question.getCreator());
+        // 问题和问题发起人的列表
+        List<QuestionDTO> questionDTOList = questionList.stream().map(question -> {
             QuestionDTO questionDTO = new QuestionDTO();
-            // 复制question的值到questionDTO中
             BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            questionDTOList.add(questionDTO);
-        }
+            questionDTO.setUser(userMapper.selectByPrimaryKey(question.getCreator()));
+            return questionDTO;
+        }).collect(Collectors.toList());
+
         // 将问题列表封装到与页面传输数据的对象中
         paginationDTO.setQuestionList(questionDTOList);
-
         return paginationDTO;
     }
 
@@ -86,7 +84,7 @@ public class QuestionService {
      * @param page
      * @param size
      */
-    public PaginationDTO getQuestionListByUserId(Integer userId, Integer page, Integer size) {
+    public PaginationDTO getQuestionListByUserId(Long userId, Integer page, Integer size) {
 
         // 用户的问题总数
         QuestionExample questionExample = new QuestionExample();
@@ -135,7 +133,7 @@ public class QuestionService {
      * @param id 问题id
      * @return
      */
-    public QuestionDTO getQuestionById(Integer id) {
+    public QuestionDTO getQuestionById(Long id) {
         // 问题信息
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
@@ -160,6 +158,9 @@ public class QuestionService {
             // 问题不存在，创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
             questionMapper.insert(question);
         } else {
             // 问题存在，更新
@@ -179,7 +180,7 @@ public class QuestionService {
      *
      * @param id
      */
-    public void increaseView(Integer id) {
+    public void increaseView(Long id) {
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);

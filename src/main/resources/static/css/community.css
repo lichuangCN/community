@@ -1,37 +1,91 @@
-body{
-    background-color: #efefef;
+body {
+    background-color: black;
 }
-.main{
+
+.main {
     background-color: white;
-    margin: 30px;
+    margin: 70px 30px 30px 30px;
+    border-radius: 25px;
 }
-.btn-publish{
+
+.btn-publish {
     float: right;
     margin-bottom: 15px;
 }
-.btn-publish-div{
+
+.btn-publish-div {
     float: right;
 }
+
 .ul-publish {
     margin: 0;
     padding: 0;
 }
+
 .ul-publish {
     margin-left: 15px;
 }
+
 .media-object {
     width: 40px;
     height: 40px;
 }
+
+.media-body {
+    padding-top: 8px;
+}
+
 .text-desc {
     font-size: 12px;
     font-weight: normal;
     color: #999;
 }
-.profile .section{
+
+.profile .section {
     margin-top: 15px;
 }
+
 .community-menu {
     font-size: 13px;
     color: #999;
+}
+
+.comment {
+    margin: 10px 0;
+}
+
+.comments {
+    padding-bottom: 5px;
+}
+
+#comment_section {
+    margin-top: 10px;
+}
+
+.comment-sp {
+    margin-top: 8px;
+    margin-bottom: 2px;
+}
+
+.menu {
+    margin-top: 5px;
+    color: #999999;
+}
+
+.menu .icon {
+    margin-left: 10px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.menu .icon:hover {
+    color: #499ef3;
+}
+
+.nav-header {
+    padding-right: 35px;
+    padding-left: 35px;
+}
+.creator {
+    margin-top: 28px;
 }

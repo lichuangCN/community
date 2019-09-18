@@ -8,7 +8,7 @@ package vex.muzhi.community.exception;
 
 public interface ICustomizeErrorCode {
 
-    String message = null;
+    Integer getCode();
 
     String getMessage();
 

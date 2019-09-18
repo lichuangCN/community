@@ -9,6 +9,16 @@
     <script type="application/javascript" src="/js/jquery.js"></script>
     <script type="application/javascript" src="/js/bootstrap.min.js"></script>
 </head>
+<script type="application/javascript">
+    // 未登录状态评论时，跳转到的登录页面，需要关闭新打开的登录页面
+    window.onload = function () {
+        var closable = window.localStorage.getItem("closable");
+        if (closable) {
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <body>
 <div th:insert="navigation :: nav"></div>
 <div class="container-fluid main">
@@ -39,7 +49,7 @@
             </div>
             <!--分页-->
             <nav aria-label="Page navigation">
-                <ul class="pagination" th:if="${pagination!=null}" >
+                <ul class="pagination" th:if="${pagination!=null}">
                     <li th:if="${pagination.showFirstPage}">
                         <a href="/?page=1" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>

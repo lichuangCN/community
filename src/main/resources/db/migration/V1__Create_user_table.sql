@@ -1,5 +1,5 @@
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `account_id` varchar(100) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `bio` varchar(256) DEFAULT NULL,
@@ -7,4 +7,4 @@ CREATE TABLE `user` (
   `gmt_create` bigint(20) DEFAULT NULL,
   `gmt_modified` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
