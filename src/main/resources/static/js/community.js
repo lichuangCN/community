@@ -1,6 +1,30 @@
+/**
+ * 回复问题
+ */
 function post() {
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
+    comment2Target(questionId, 1, content);
+}
+
+/**
+ * 回复评论
+ * @param elem
+ */
+function comment(elem) {
+
+    var commentId = elem.getAttribute("data-id");
+    var content = $("#input-" + commentId).val();
+    comment2Target(commentId, 2, content);
+}
+
+/**
+ * 发送评论内容
+ * @param targetId
+ * @param type
+ * @param content
+ */
+function comment2Target(targetId, type, content) {
     if (!content) {
         alert("内容不能为空~");
         return;
@@ -10,9 +34,9 @@ function post() {
         url: "/comment",
         contentType: "application/json",
         data: JSON.stringify({
-            "parentId": questionId,
+            "parentId": targetId,
             "content": content,
-            "type": 1
+            "type": type
         }),
         dataType: 'json',
         success: function (response) {
@@ -33,5 +57,84 @@ function post() {
                 }
             }
         }
-    })
+    });
+}
+
+/**
+ * 展开二级评论
+ */
+function collapseComments(elem) {
+    // 一级评论的id
+    var id = elem.getAttribute("data-id");
+    var comments = $("#comment-" + id);
+
+    // 获取二级评论展开状态
+    if (elem.getAttribute("data-collapse")) {
+        // 隐藏二级评论
+        comments.removeClass("in");
+        elem.removeAttribute("data-collapse");
+        elem.classList.remove("active");
+    } else {
+        var subCommentContainer = $("#comment-" + id);
+        if (subCommentContainer.children().length != 1) {
+            //展开二级评论
+            comments.addClass("in");
+            // 标记二级评论展开状态
+            elem.setAttribute("data-collapse", "in");
+            elem.classList.add("active");
+        } else {
+            $.getJSON("/comment/" + id, function (data) {
+                if (!data.data) {
+                    //展开二级评论
+                    comments.addClass("in");
+                    // 标记二级评论展开状态
+                    elem.setAttribute("data-collapse", "in");
+                    elem.classList.add("active");
+                } else {
+                    $.each(data.data.reverse(), function (index, comment) {
+                        var mediaLeftElement = $("<div/>", {
+                            "class": "media-left"
+                        }).append($("<img/>", {
+                            "class": "media-object img-rounded",
+                            "src": comment.user.avatarUrl
+                        }));
+
+                        var mediaBodyElement = $("<div/>", {
+                            "class": "media-body"
+                        }).append($("<h5/>", {
+                            "class": "media-heading",
+                            "html": comment.user.name
+                        })).append($("<div/>", {
+                            "html": comment.content
+                        })).append($("<div/>", {
+                            "class": "menu"
+                        }).append($("<span/>", {
+                            "class": "pull-right",
+                            "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
+                        })));
+
+                        var separator = $("<div/>",{
+                        }).append("<hr>", {
+                            "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp"
+                        });
+
+                        var mediaElement = $("<div/>", {
+                            "class": "media"
+                        }).append(mediaLeftElement).append(mediaBodyElement);
+
+                        var commentElement = $("<div/>", {
+                            "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
+                        }).append(mediaElement).append(separator);
+
+                        subCommentContainer.prepend(commentElement);
+                    });
+                    //展开二级评论
+                    comments.addClass("in");
+                    // 标记二级评论展开状态
+                    elem.setAttribute("data-collapse", "in");
+                    elem.classList.add("active");
+                }
+            });
+        }
+    }
 }

@@ -7,5 +7,6 @@ CREATE TABLE `comment` (
 	`gmt_create` BIGINT DEFAULT '0' COMMENT '创建时间',
 	`gmt_modified` BIGINT DEFAULT '0' COMMENT '更新时间',
 	`like_count` INT DEFAULT '0' COMMENT '点赞数',
+	`comment_count` INT DEFAULT '0' COMMENT '评论数',
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8;

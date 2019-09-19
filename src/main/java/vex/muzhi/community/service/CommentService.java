@@ -8,10 +8,7 @@ import vex.muzhi.community.dto.CommentDTO;
 import vex.muzhi.community.enums.CommentTypeEnum;
 import vex.muzhi.community.exception.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
-import vex.muzhi.community.mapper.CommentMapper;
-import vex.muzhi.community.mapper.QuestionExtMapper;
-import vex.muzhi.community.mapper.QuestionMapper;
-import vex.muzhi.community.mapper.UserMapper;
+import vex.muzhi.community.mapper.*;
 import vex.muzhi.community.model.*;
 
 import java.util.ArrayList;
@@ -32,6 +29,9 @@ public class CommentService {
     private CommentMapper commentMapper;
 
     @Autowired
+    private CommentExtMapper commentExtMapper;
+
+    @Autowired
     private QuestionMapper questionMapper;
 
     @Autowired
@@ -48,8 +48,10 @@ public class CommentService {
     @Transactional
     public void addComment(Comment comment) {
 
-        // 初始此评论点赞数
+        // 初始点赞数
         comment.setLikeCount(0);
+        // 初始评论数
+        comment.setCommentCount(0);
 
         // 未选中被回复的问题或评论
         if (comment.getParentId() == null || comment.getParentId() == 0) {
@@ -69,6 +71,8 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            dbComment.setCommentCount(1);
+            commentExtMapper.increaseCommentCount(dbComment);
         } else {
             // 回复问题
             Question dbQuestion = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -83,17 +87,18 @@ public class CommentService {
     }
 
     /**
-     * 某个问题的所有回复
+     * 某个问题/评论的所有回复
      *
-     * @param id 问题id
+     * @param id   问题id/评论Id
+     * @param type 问题/评论类型
      * @return
      */
-    public List<CommentDTO> getCommentsByQuestionId(Long id) {
+    public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
         // 问题id和属于回复问题的评论
         commentExample.createCriteria()
                 .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                .andTypeEqualTo(type.getType());
         // 根据评论时间排序，最新评论最前
         commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);

@@ -5,9 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import vex.muzhi.community.dto.CommentCreateDTO;
 import vex.muzhi.community.dto.CommentDTO;
 import vex.muzhi.community.dto.QuestionDTO;
+import vex.muzhi.community.enums.CommentTypeEnum;
 import vex.muzhi.community.service.CommentService;
 import vex.muzhi.community.service.QuestionService;
 
@@ -34,7 +34,7 @@ public class QuestionController {
         // 问题详情
         QuestionDTO questionDTO = questionService.getQuestionById(id);
         // 问题评论列表
-        List<CommentDTO> comments = commentService.getCommentsByQuestionId(id);
+        List<CommentDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         // 累加阅读数功能
         questionService.increaseView(id);
         model.addAttribute("question", questionDTO);

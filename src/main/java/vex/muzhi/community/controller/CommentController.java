@@ -3,12 +3,11 @@ package vex.muzhi.community.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import vex.muzhi.community.dto.CommentCreateDTO;
+import vex.muzhi.community.dto.CommentDTO;
 import vex.muzhi.community.dto.ResultDTO;
+import vex.muzhi.community.enums.CommentTypeEnum;
 import vex.muzhi.community.exception.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.model.Comment;
@@ -16,6 +15,7 @@ import vex.muzhi.community.model.User;
 import vex.muzhi.community.service.CommentService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Author: lichuang
@@ -51,8 +51,14 @@ public class CommentController {
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
         comment.setCommentator(user.getId());
-
         commentService.addComment(comment);
         return ResultDTO.okOf();
+    }
+
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
+        List<CommentDTO> commentDTOList = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOList);
     }
 }
