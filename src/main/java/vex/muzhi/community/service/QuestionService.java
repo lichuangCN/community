@@ -1,5 +1,6 @@
 package vex.muzhi.community.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import vex.muzhi.community.model.QuestionExample;
 import vex.muzhi.community.model.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +65,9 @@ public class QuestionService {
         // 查询的起始位置
         Integer offset = size * (page - 1);
         // 问题列表
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample example = new QuestionExample();
+        example.setOrderByClause("gmt_modified desc");
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
         // 问题和问题发起人的列表
         List<QuestionDTO> questionDTOList = questionList.stream().map(question -> {
             QuestionDTO questionDTO = new QuestionDTO();
@@ -185,5 +189,35 @@ public class QuestionService {
         question.setId(id);
         question.setViewCount(1);
         questionExtMapper.increaseView(question);
+    }
+
+    /**
+     * 检索相关问题
+     *
+     * @param questionDTO
+     * @return
+     */
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+
+        // 问题没有标签
+        if (StringUtils.isBlank(questionDTO.getTag())) {
+            return new ArrayList<>();
+        }
+
+        String[] tags = StringUtils.split(questionDTO.getTag(), ",");
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        // 对问题和问题发布人进行数据封装
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO dto = new QuestionDTO();
+            BeanUtils.copyProperties(q, dto);
+            // 问题发布人
+            dto.setUser(userMapper.selectByPrimaryKey(questionDTO.getCreator()));
+            return dto;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 }

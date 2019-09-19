@@ -104,7 +104,7 @@ public class CommentService {
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         // 问题没有评论
         if (comments.size() == 0) {
-            return null;
+            return new ArrayList<>();
         }
         // 去重的评论人的id集合
         Set<Long> commentators = comments.stream()

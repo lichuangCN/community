@@ -3,6 +3,8 @@ package vex.muzhi.community.mapper;
 import org.apache.ibatis.annotations.Param;
 import vex.muzhi.community.model.Question;
 
+import java.util.List;
+
 // @Mapper
 public interface QuestionExtMapper {
 
@@ -20,4 +22,11 @@ public interface QuestionExtMapper {
      * @return
      */
     int increaseCommentCount(@Param("record") Question record);
+
+    /**
+     * 检索相关问题(依据标签检索)
+     * @param record
+     * @return
+     */
+    List<Question> selectRelated(@Param("record") Question record);
 }

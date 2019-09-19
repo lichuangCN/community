@@ -26,7 +26,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
-                        @RequestParam(name = "size", defaultValue = "5") Integer size) {
+                        @RequestParam(name = "size", defaultValue = "8") Integer size) {
 
         // 问题内容以及问题发起人信息列表
         PaginationDTO pagination = questionService.getQuestionList(page, size);

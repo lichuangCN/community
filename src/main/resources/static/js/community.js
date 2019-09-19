@@ -113,8 +113,7 @@ function collapseComments(elem) {
                             "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
                         })));
 
-                        var separator = $("<div/>",{
-                        }).append("<hr>", {
+                        var separator = $("<div/>", {}).append("<hr>", {
                             "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-sp"
                         });
 
@@ -138,3 +137,21 @@ function collapseComments(elem) {
         }
     }
 }
+
+/**
+ * 返回顶部
+ */
+$(function () {
+    $(function () {
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 100) {
+                $("#go-top").fadeIn(1000);//一秒渐入动画
+            } else {
+                $("#go-top").fadeOut(1000);//一秒渐隐动画
+            }
+        });
+        $("#go-top").click(function () {
+            $('body,html').animate({scrollTop: 0}, 1000);
+        });
+    });
+});
