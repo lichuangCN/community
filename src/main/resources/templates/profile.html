@@ -30,11 +30,15 @@
                         <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
                     </h4>
                     <span class="text-desc">
-							<span th:text="${question.user.name}"></span>&nbsp;.&nbsp;
-							<span th:text="${question.commentCount}"></span>个回复&nbsp;.&nbsp;
-							<span th:text="${question.viewCount}"></span>次浏览&nbsp;.&nbsp;
-							<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd mm:HH')}"></span>
-						</span>
+                        <span th:text="${question.user.name}"></span>&nbsp;.&nbsp;
+                        <span th:text="${question.commentCount}"></span>个回复&nbsp;.&nbsp;
+                        <span th:text="${question.viewCount}"></span>次浏览&nbsp;.&nbsp;
+                        <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd mm:HH')}"></span> .&nbsp;
+                        <a th:href="@{'/publish/'+${question.id}}" class="community-menu"
+                           th:if="${session.user!=null && session.user.id==question.creator}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            编辑</a>
+                    </span>
                 </div>
             </div>
             <!--分页-->

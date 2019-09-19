@@ -1,5 +1,6 @@
 package vex.muzhi.community.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import vex.muzhi.community.cache.TagCache;
 import vex.muzhi.community.dto.QuestionDTO;
 import vex.muzhi.community.model.Question;
 import vex.muzhi.community.model.User;
@@ -28,10 +30,12 @@ public class PublishController {
     /**
      * 跳转到创建问题页面
      *
+     * @param model
      * @return
      */
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -55,6 +59,7 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("tags", TagCache.get());
         // 前端验证放在后端进行
         if (title == null || title.equals("")) {
             model.addAttribute("error", "标题不能为空");
@@ -66,6 +71,12 @@ public class PublishController {
         }
         if (tag == null || tag.equals("")) {
             model.addAttribute("error", "标签不能为空");
+            return "publish";
+        }
+        // 非法标签
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNoneBlank(invalid)) {
+            model.addAttribute("error", "输入非法标签:" + invalid);
             return "publish";
         }
 
@@ -99,6 +110,8 @@ public class PublishController {
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());
+
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 }

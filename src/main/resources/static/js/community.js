@@ -155,3 +155,26 @@ $(function () {
         });
     });
 });
+
+/**
+ * 标签输入栏
+ * @param value
+ */
+function selectTag(e) {
+    var value = e.getAttribute("data-tag");
+    var previous = $("#tag").val();
+    if (previous.indexOf(value) == -1) {
+        if (previous) {
+            $("#tag").val(previous + ',' + value);
+        } else {
+            $("#tag").val(value);
+        }
+    }
+}
+
+/**
+ * 显示标签框
+ */
+function showSelectTag() {
+    $("#select-tag").show();
+}
