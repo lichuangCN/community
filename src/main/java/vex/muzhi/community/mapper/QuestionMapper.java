@@ -3,6 +3,7 @@ package vex.muzhi.community.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+import vex.muzhi.community.dto.QuestionQueryDTO;
 import vex.muzhi.community.model.Question;
 import vex.muzhi.community.model.QuestionExample;
 
@@ -134,4 +135,5 @@ public interface QuestionMapper {
      * @mbg.generated Fri Sep 20 15:17:19 CST 2019
      */
     int updateByPrimaryKey(Question record);
+
 }

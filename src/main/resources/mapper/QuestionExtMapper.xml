@@ -34,4 +34,27 @@
         from question
         where id != #{record.id,jdbcType=INTEGER} and tag regexp #{record.tag}
     </select>
+
+    <!--查询相关问题总数(根据搜索条件查询)-->
+    <select id="countBySearch" parameterType="vex.muzhi.community.dto.QuestionQueryDTO" resultType="java.lang.Integer">
+        select count(*)
+        from question
+        <where>
+            <if test="search!=null">
+                and title regexp #{search}
+            </if>
+        </where>
+    </select>
+
+    <!--查询相关问题(根据搜索条件查询)-->
+    <select id="selectBySearch" parameterType="vex.muzhi.community.dto.QuestionQueryDTO" resultMap="BaseResultMap">
+        select *
+        from question
+        <where>
+            <if test="search!=null">
+                and title regexp #{search}
+            </if>
+        </where>
+        order by gmt_modified desc limit #{offset},#{size}
+    </select>
 </mapper>

@@ -30,8 +30,10 @@
                            autocomplete="off"
                            th:value="${title}">
                 </div>
-                <div class="form-group" id="question-editor">
+                <div>
                     <label for="description">问题内容(必填，请参照右侧提示)</label>
+                </div>
+                <div class="form-group" id="question-editor">
                     <textarea style="display: none"
                               class="form-control"
                               name="description"
@@ -49,6 +51,7 @@
                             watch: false,
                             placeholder: "请输入问题描述",
                             imageUpload: true,
+                            emoji: true,
                             imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                             imageUploadURL: "/file/upload",
                             path: "/js/lib/"

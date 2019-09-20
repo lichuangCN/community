@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vex.muzhi.community.dto.PaginationDTO;
 import vex.muzhi.community.dto.QuestionDTO;
+import vex.muzhi.community.dto.QuestionQueryDTO;
 import vex.muzhi.community.exception.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.mapper.QuestionExtMapper;
@@ -41,14 +42,24 @@ public class QuestionService {
     /**
      * 获取问题内容以及问题发起人信息列表
      *
+     * @param search
      * @param page
      * @param size
      * @return
      */
-    public PaginationDTO getQuestionList(Integer page, Integer size) {
+    public PaginationDTO getQuestionList(String search, Integer page, Integer size) {
+
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        // 是否是搜索状态
+        if (StringUtils.isNotBlank(search)) {
+            String[] conditions = StringUtils.split(search, " ");
+            String regexpTag = Arrays.stream(conditions).collect(Collectors.joining("|"));
+            // 检索条件
+            questionQueryDTO.setSearch(regexpTag);
+        }
 
         // 问题总数
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+        Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
         PaginationDTO<List<QuestionDTO>> paginationDTO = new PaginationDTO<>();
@@ -64,10 +75,11 @@ public class QuestionService {
         paginationDTO.setPagination(totalPage, page);
         // 查询的起始位置
         Integer offset = size * (page - 1);
+        // 设置分页查询条件
+        questionQueryDTO.setOffset(offset);
+        questionQueryDTO.setSize(size);
         // 问题列表
-        QuestionExample example = new QuestionExample();
-        example.setOrderByClause("gmt_modified desc");
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
+        List<Question> questionList = questionExtMapper.selectBySearch(questionQueryDTO);
         // 问题和问题发起人的列表
         List<QuestionDTO> questionDTOList = questionList.stream().map(question -> {
             QuestionDTO questionDTO = new QuestionDTO();

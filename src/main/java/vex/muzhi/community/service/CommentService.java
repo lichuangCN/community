@@ -115,6 +115,10 @@ public class CommentService {
      * @param notifyOuterId    通知对应的问题id
      */
     private void createNotification(Comment comment, Long receiverId, NotificationTypeEnum notificationType, String notifyOuterTitle, Long notifyOuterId) {
+        // 是否自己通知自己
+        if (comment.getCommentator() == receiverId) {
+            return;
+        }
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setReceiverId(receiverId);
