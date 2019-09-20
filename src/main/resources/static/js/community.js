@@ -105,6 +105,7 @@ function collapseComments(elem) {
                             "class": "media-heading",
                             "html": comment.user.name
                         })).append($("<div/>", {
+                            "class": "comment-area",
                             "html": comment.content
                         })).append($("<div/>", {
                             "class": "menu"

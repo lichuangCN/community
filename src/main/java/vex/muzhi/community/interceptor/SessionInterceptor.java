@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.User;
 import vex.muzhi.community.model.UserExample;
+import vex.muzhi.community.service.NotificationService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,9 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 从请求中的cookie中获取带有token的cookie, 判断此用户之前是否登陆过
@@ -37,8 +41,11 @@ public class SessionInterceptor implements HandlerInterceptor {
                     userExample.createCriteria().andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
                     if (users.size() != 0) {
+                        // 未读通知数
+                        Long unreadCount = notificationService.unreadCount(users.get(0).getId());
                         // 将此用户信息存放在session中
                         request.getSession().setAttribute("user", users.get(0));
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                     }
                     break;
                 }

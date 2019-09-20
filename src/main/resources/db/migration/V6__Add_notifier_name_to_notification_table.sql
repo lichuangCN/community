@@ -1,0 +1,1 @@
+ALTER TABLE notification ADD COLUMN notify_outer_title VARCHAR(256) DEFAULT NULL COMMENT '通知的标题:问题标题/评论内容';

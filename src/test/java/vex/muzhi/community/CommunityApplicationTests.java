@@ -5,25 +5,28 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import vex.muzhi.community.mapper.QuestionMapper;
-import vex.muzhi.community.model.Question;
+import vex.muzhi.community.enums.NotificationTypeEnum;
+import vex.muzhi.community.enums.NotificationStatusEnum;
+import vex.muzhi.community.mapper.NotificationMapper;
+import vex.muzhi.community.model.Notification;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CommunityApplicationTests {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private NotificationMapper notificationMapper;
 
     @Test
     public void test() {
-        Question record = new Question();
-        record.setTitle("title");
-        record.setDescription("description");
-        record.setTag("tags");
-        record.setCreator(1L);
-        record.setGmtCreate(System.currentTimeMillis());
-        record.setGmtModified(record.getGmtCreate());
-        questionMapper.insertSelective(record);
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setReceiverId(1L);
+        notification.setNotifierId(1L);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setNotifyType(NotificationTypeEnum.REPLAY_QUESTION.getType());
+        notification.setNotifyOuterId(14L);
+        notification.setNotifyOuterTitle("你好我是测试你好我是测试你好我是测试你好我是测试");
+        notificationMapper.insert(notification);
     }
 }

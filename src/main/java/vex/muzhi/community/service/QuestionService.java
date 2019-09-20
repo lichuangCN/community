@@ -51,7 +51,7 @@ public class QuestionService {
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<List<QuestionDTO>> paginationDTO = new PaginationDTO<>();
 
         // 传入非法参数的处理
         if (page > totalPage) {
@@ -77,7 +77,7 @@ public class QuestionService {
         }).collect(Collectors.toList());
 
         // 将问题列表封装到与页面传输数据的对象中
-        paginationDTO.setQuestionList(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 
@@ -88,7 +88,7 @@ public class QuestionService {
      * @param page
      * @param size
      */
-    public PaginationDTO getQuestionListByUserId(Long userId, Integer page, Integer size) {
+    public PaginationDTO questionListByUserId(Long userId, Integer page, Integer size) {
 
         // 用户的问题总数
         QuestionExample questionExample = new QuestionExample();
@@ -97,7 +97,7 @@ public class QuestionService {
         Integer totalCount = (int) questionMapper.countByExample(questionExample);
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
-        PaginationDTO paginationDTO = new PaginationDTO();
+        PaginationDTO<List<QuestionDTO>> paginationDTO = new PaginationDTO<>();
 
         // 传入非法参数的处理
         if (page >= totalPage) {
@@ -115,6 +115,7 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         example.createCriteria()
                 .andCreatorEqualTo(userId);
+        example.setOrderByClause("gmt_create desc");
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questionList) {
@@ -126,7 +127,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         // 将问题列表封装到与页面传输数据的对象中
-        paginationDTO.setQuestionList(questionDTOList);
+        paginationDTO.setData(questionDTOList);
 
         return paginationDTO;
     }

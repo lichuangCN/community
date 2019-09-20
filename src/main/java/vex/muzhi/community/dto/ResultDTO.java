@@ -1,7 +1,7 @@
 package vex.muzhi.community.dto;
 
 import lombok.Data;
-import vex.muzhi.community.enums.ResultCode;
+import vex.muzhi.community.enums.ResultCodeEnum;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.exception.ICustomizeErrorCode;
 
@@ -36,16 +36,16 @@ public class ResultDTO<T> {
 
     public static <T> ResultDTO okOf(T data) {
         ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setCode(ResultCode.SUCCESS.getCode());
-        resultDTO.setMessage(ResultCode.SUCCESS.getMessage());
+        resultDTO.setCode(ResultCodeEnum.SUCCESS.getCode());
+        resultDTO.setMessage(ResultCodeEnum.SUCCESS.getMessage());
         resultDTO.setData(data);
         return resultDTO;
     }
 
     public static ResultDTO okOf() {
         ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setCode(ResultCode.SUCCESS.getCode());
-        resultDTO.setMessage(ResultCode.SUCCESS.getMessage());
+        resultDTO.setCode(ResultCodeEnum.SUCCESS.getCode());
+        resultDTO.setMessage(ResultCodeEnum.SUCCESS.getMessage());
         return resultDTO;
     }
 }

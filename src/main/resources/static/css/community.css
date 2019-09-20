@@ -168,3 +168,9 @@ body {
     list-style: none;
     padding-left: 0;
 }
+/* 解决评论溢出问题*/
+.comment-area {
+    display: block;
+    word-break: break-all;
+    word-wrap: break-word;
+}

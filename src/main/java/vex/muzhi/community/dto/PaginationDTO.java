@@ -11,9 +11,9 @@ import java.util.List;
  * Description: 问题列表
  */
 @Data
-public class PaginationDTO {
+public class PaginationDTO<T> {
 
-    private List<QuestionDTO> questionList;
+    private T data;
     // 是否有向前按钮
     private boolean showPrevious;
     // 第一页按钮

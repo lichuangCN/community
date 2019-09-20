@@ -76,7 +76,7 @@
                         <h5 class="media-heading">
                             <span th:text="${comment.user.name}"></span>
                         </h5>
-                        <div th:text="${comment.content}"></div>
+                        <div class="comment-area" th:text="${comment.content}"></div>
                         <div class="menu">
                             <span class="glyphicon glyphicon-thumbs-up icon"></span>
                             <span class="comment-icon icon" th:data-id="${comment.id}"

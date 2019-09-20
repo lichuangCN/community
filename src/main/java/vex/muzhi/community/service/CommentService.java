@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vex.muzhi.community.dto.CommentDTO;
 import vex.muzhi.community.enums.CommentTypeEnum;
+import vex.muzhi.community.enums.NotificationStatusEnum;
+import vex.muzhi.community.enums.NotificationTypeEnum;
 import vex.muzhi.community.exception.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.mapper.*;
@@ -40,6 +42,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     /**
      * 添加评论/回复
      *
@@ -73,6 +78,13 @@ public class CommentService {
             commentMapper.insert(comment);
             dbComment.setCommentCount(1);
             commentExtMapper.increaseCommentCount(dbComment);
+            // 创建通知
+            // 截取评论的长度为10个字符
+            String content = dbComment.getContent();
+            if (content.length() > 10) {
+                content = content.substring(0, 10);
+            }
+            createNotification(comment, dbComment.getCommentator(), NotificationTypeEnum.REPLAY_COMMENT, content, dbComment.getParentId());
         } else {
             // 回复问题
             Question dbQuestion = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -83,7 +95,35 @@ public class CommentService {
             commentMapper.insert(comment);
             dbQuestion.setCommentCount(1);
             questionExtMapper.increaseCommentCount(dbQuestion);
+            // 创建通知
+            // 截取评论的长度为10个字符
+            String title = dbQuestion.getTitle();
+            if (title.length() > 10) {
+                title = title.substring(0, 10);
+            }
+            createNotification(comment, dbQuestion.getCreator(), NotificationTypeEnum.REPLAY_QUESTION, title, dbQuestion.getId());
         }
+    }
+
+    /**
+     * 创建通知
+     *
+     * @param comment          评论
+     * @param receiverId       被通知人
+     * @param notificationType 通知的类型
+     * @param notifyOuterTitle 通知的标题
+     * @param notifyOuterId    通知对应的问题id
+     */
+    private void createNotification(Comment comment, Long receiverId, NotificationTypeEnum notificationType, String notifyOuterTitle, Long notifyOuterId) {
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setReceiverId(receiverId);
+        notification.setNotifierId(comment.getCommentator());
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setNotifyType(notificationType.getType());
+        notification.setNotifyOuterId(notifyOuterId);
+        notification.setNotifyOuterTitle(notifyOuterTitle);
+        notificationMapper.insert(notification);
     }
 
     /**

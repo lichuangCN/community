@@ -6,14 +6,16 @@ package vex.muzhi.community.enums;
  * Description:
  */
 
-public enum ResultCode {
+public enum ResultCodeEnum {
 
     SUCCESS(200, "请求成功"),
+    REQUEST_ERROR(400, "请求错了，换个姿势试试~"),
+    SERVICE_ERROR(500, "服务器努力工作中~"),
     ;
     private Integer code;
     private String message;
 
-    ResultCode(Integer code, String message) {
+    ResultCodeEnum(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

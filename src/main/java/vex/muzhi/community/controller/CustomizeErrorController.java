@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import vex.muzhi.community.enums.ResultCodeEnum;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,10 +30,10 @@ public class CustomizeErrorController implements ErrorController {
                                   Model model) {
         HttpStatus status = getStatus(request);
         if (status.is4xxClientError()) {
-            model.addAttribute("message", "请求错了，换个姿势试试~");
+            model.addAttribute("message", ResultCodeEnum.REQUEST_ERROR.getMessage());
         }
         if (status.is5xxServerError()) {
-            model.addAttribute("message", "服务器努力工作中~");
+            model.addAttribute("message", ResultCodeEnum.SERVICE_ERROR.getMessage());
         }
         return new ModelAndView("error");
     }
