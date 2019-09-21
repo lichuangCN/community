@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vex.muzhi.community.dto.NotificationDTO;
 import vex.muzhi.community.dto.PaginationDTO;
+import vex.muzhi.community.enums.CustomizeErrorCode;
 import vex.muzhi.community.enums.NotificationStatusEnum;
 import vex.muzhi.community.enums.NotificationTypeEnum;
-import vex.muzhi.community.exception.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.mapper.NotificationMapper;
 import vex.muzhi.community.mapper.UserMapper;
@@ -16,6 +16,7 @@ import vex.muzhi.community.model.Notification;
 import vex.muzhi.community.model.NotificationExample;
 import vex.muzhi.community.model.User;
 import vex.muzhi.community.model.UserExample;
+import vex.muzhi.community.util.PaginationDTOUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,18 +53,11 @@ public class NotificationService {
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
         PaginationDTO<List<NotificationDTO>> paginationDTO = new PaginationDTO<>();
+        // 设置分页信息除去列表数据外的其他参数
+        PaginationDTOUtil.setPagination(paginationDTO, totalPage, page);
 
-        // 传入非法参数的处理
-        if (page > totalPage) {
-            page = totalPage;
-        }
-        if (page <= 1) {
-            page = 1;
-        }
-        paginationDTO.setPagination(totalPage, page);
-
-        // 查询的起始位置
-        Integer offset = size * (page - 1);
+        // 计算查询的起始位置
+        Integer offset = size * (paginationDTO.getPage() - 1);
         NotificationExample example = new NotificationExample();
         example.createCriteria()
                 .andReceiverIdEqualTo(userId);

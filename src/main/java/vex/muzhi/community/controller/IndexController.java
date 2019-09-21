@@ -1,5 +1,6 @@
 package vex.muzhi.community.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +23,18 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
-                        @RequestParam(name = "size", defaultValue = "7") Integer size,
+                        @RequestParam(name = "size", defaultValue = "5") Integer size,
                         @RequestParam(name = "search", required = false) String search) {
 
         // 问题内容以及问题发起人信息列表
-        PaginationDTO pagination = questionService.getQuestionList(search,page, size);
+        PaginationDTO pagination = questionService.getQuestionList(search, page, size);
         model.addAttribute("pagination", pagination);
+
+        if (StringUtils.isNoneBlank(search)){
+            model.addAttribute("search", search);
+        } else {
+            model.addAttribute("search", "");
+        }
         return "index";
     }
 }

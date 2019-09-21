@@ -1,5 +1,7 @@
 package vex.muzhi.community.exception;
 
+import vex.muzhi.community.enums.ICustomizeErrorCode;
+
 /**
  * Author: lichuang
  * Date: Create in 16:17 2019/9/16

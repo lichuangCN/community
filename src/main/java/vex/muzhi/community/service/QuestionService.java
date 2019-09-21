@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import vex.muzhi.community.dto.PaginationDTO;
 import vex.muzhi.community.dto.QuestionDTO;
 import vex.muzhi.community.dto.QuestionQueryDTO;
-import vex.muzhi.community.exception.CustomizeErrorCode;
+import vex.muzhi.community.enums.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.mapper.QuestionExtMapper;
 import vex.muzhi.community.mapper.QuestionMapper;
@@ -16,6 +16,7 @@ import vex.muzhi.community.mapper.UserMapper;
 import vex.muzhi.community.model.Question;
 import vex.muzhi.community.model.QuestionExample;
 import vex.muzhi.community.model.User;
+import vex.muzhi.community.util.PaginationDTOUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,19 +63,12 @@ public class QuestionService {
         Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
+
         PaginationDTO<List<QuestionDTO>> paginationDTO = new PaginationDTO<>();
-
-        // 传入非法参数的处理
-        if (page > totalPage) {
-            page = totalPage;
-        }
-        if (page <= 1) {
-            page = 1;
-        }
-
-        paginationDTO.setPagination(totalPage, page);
+        // 设置分页信息除去列表数据外的其他参数
+        PaginationDTOUtil.setPagination(paginationDTO, totalPage, page);
         // 查询的起始位置
-        Integer offset = size * (page - 1);
+        Integer offset = size * (paginationDTO.getPage() - 1);
         // 设置分页查询条件
         questionQueryDTO.setOffset(offset);
         questionQueryDTO.setSize(size);
@@ -110,19 +104,11 @@ public class QuestionService {
         // 总页数
         Integer totalPage = (totalCount % size == 0) ? (totalCount / size) : (totalCount / size + 1);
         PaginationDTO<List<QuestionDTO>> paginationDTO = new PaginationDTO<>();
+        // 设置分页信息除去列表数据外的其他参数
+        PaginationDTOUtil.setPagination(paginationDTO, totalPage, page);
 
-        // 传入非法参数的处理
-        if (page >= totalPage) {
-            page = totalPage;
-        }
-        if (page <= 1) {
-            page = 1;
-        }
-
-        paginationDTO.setPagination(totalPage, page);
-
-        // 查询的起始位置
-        Integer offset = size * (page - 1);
+        // 计算查询的起始位置
+        Integer offset = size * (paginationDTO.getPage() - 1);
         // 某位用户的问题列表
         QuestionExample example = new QuestionExample();
         example.createCriteria()
@@ -140,7 +126,6 @@ public class QuestionService {
         }
         // 将问题列表封装到与页面传输数据的对象中
         paginationDTO.setData(questionDTOList);
-
         return paginationDTO;
     }
 

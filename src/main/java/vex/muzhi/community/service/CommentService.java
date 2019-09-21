@@ -8,7 +8,7 @@ import vex.muzhi.community.dto.CommentDTO;
 import vex.muzhi.community.enums.CommentTypeEnum;
 import vex.muzhi.community.enums.NotificationStatusEnum;
 import vex.muzhi.community.enums.NotificationTypeEnum;
-import vex.muzhi.community.exception.CustomizeErrorCode;
+import vex.muzhi.community.enums.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.mapper.*;
 import vex.muzhi.community.model.*;
@@ -66,7 +66,7 @@ public class CommentService {
         if (comment.getType() == null || !CommentTypeEnum.isExist(comment.getType())) {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
         }
-
+        // 创建回复
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             // 回复评论
             // 被回复的评论

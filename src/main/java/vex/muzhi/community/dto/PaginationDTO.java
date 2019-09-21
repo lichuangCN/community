@@ -29,37 +29,4 @@ public class PaginationDTO<T> {
     // 总页码
     private Integer totalPage;
 
-    public void setPagination(Integer totalPage, Integer page) {
-
-        // 总页码
-        this.totalPage = totalPage;
-        // 当前页码
-        this.page = page;
-
-        // 添加当前页
-        pages.add(page);
-        // 设置页面显示的页码列表
-        for (int i = 1; i <= 3; i++) {
-            // 补全左侧页码
-            if (page - i > 0) {
-                // 头插，插入第一位
-                pages.add(0, page - i);
-            }
-            // 补全右侧页码
-            if (page + i <= totalPage) {
-                // 尾插
-                pages.add(page + i);
-            }
-        }
-        // 当前页码为第一页的时候，不展示向前图标
-        showPrevious = (page == 1) ? false : true;
-        // 当前页码为最后一页的时候，不展示向后图标
-        showNext = (page == totalPage) ? false : true;
-
-        // 页面显示的页码不包含第一页的时候，展示跳到第一页的图标
-        showFirstPage = (pages.contains(1)) ? false : true;
-        // 页面显示的页码不包含最后一页的时候，展示跳到最后一页图标
-        showEndPage = (pages.contains(totalPage)) ? false : true;
-
-    }
 }

@@ -4,7 +4,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import vex.muzhi.community.exception.CustomizeErrorCode;
+import vex.muzhi.community.enums.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 
 /**

@@ -8,7 +8,7 @@ import vex.muzhi.community.dto.CommentCreateDTO;
 import vex.muzhi.community.dto.CommentDTO;
 import vex.muzhi.community.dto.ResultDTO;
 import vex.muzhi.community.enums.CommentTypeEnum;
-import vex.muzhi.community.exception.CustomizeErrorCode;
+import vex.muzhi.community.enums.CustomizeErrorCode;
 import vex.muzhi.community.exception.CustomizeException;
 import vex.muzhi.community.model.Comment;
 import vex.muzhi.community.model.User;

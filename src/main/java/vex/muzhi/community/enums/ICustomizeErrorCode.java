@@ -1,4 +1,4 @@
-package vex.muzhi.community.exception;
+package vex.muzhi.community.enums;
 
 /**
  * Author: lichuang

@@ -3,7 +3,7 @@ package vex.muzhi.community.dto;
 import lombok.Data;
 import vex.muzhi.community.enums.ResultCodeEnum;
 import vex.muzhi.community.exception.CustomizeException;
-import vex.muzhi.community.exception.ICustomizeErrorCode;
+import vex.muzhi.community.enums.ICustomizeErrorCode;
 
 /**
  * Author: lichuang
