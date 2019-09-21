@@ -1,7 +1,12 @@
 body {
     background-color: black;
 }
-
+.footer{
+    text-align: center;
+    font-size: 14px;
+    color: #999999;
+    padding: 0 0 18px 0;
+}
 .main {
     background-color: white;
     margin: 70px 30px 30px 30px;

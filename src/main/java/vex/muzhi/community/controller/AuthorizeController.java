@@ -1,5 +1,6 @@
 package vex.muzhi.community.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vex.muzhi.community.dto.AccessTokenDTO;
 import vex.muzhi.community.dto.GithubUser;
+import vex.muzhi.community.enums.LogInfoEnum;
 import vex.muzhi.community.model.User;
 import vex.muzhi.community.provider.GithubProvider;
 import vex.muzhi.community.service.UserService;
@@ -22,6 +24,7 @@ import java.util.UUID;
  * Description:
  */
 @Controller
+@Slf4j
 public class AuthorizeController {
 
     @Autowired
@@ -70,6 +73,7 @@ public class AuthorizeController {
             response.addCookie(new Cookie("token", token));
             return "redirect:/";
         } else {
+            log.error(LogInfoEnum.GITHUB_USER_ERROR.getMessage(), githubUser);
             // 登录失败，重新登录
             return "redirect:/";
         }
