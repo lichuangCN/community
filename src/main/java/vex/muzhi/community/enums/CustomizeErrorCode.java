@@ -17,6 +17,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     COMMENT_IS_EMPTY(2007, "评论内容为空，请输入内容"),
     READ_NOTIFICATION_FAIL(2008, "你在进行错误的尝试去读取别人的通知"),
     NOTIFICATION_NOT_FOUND(2008, "这条通知貌似不翼而飞了"),
+    IMAGE_UPLOAD_FAIL(2009, "图片上传失败，请稍后重试"),
     ;
 
     private String message;

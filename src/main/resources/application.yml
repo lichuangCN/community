@@ -5,6 +5,9 @@ github.client.id: 009778391ff7a0e735d1
 github.client.secret: b0121153567caca523f269caaa3b2962193bf098
 github.redirect.uri: http://localhost:8088/callback
 spring:
+  # 多个配置文件
+  profiles:
+    active: @spring.profiles.active@
   # mysql数据库
   datasource:
     driverclassname: com.mysql.jdbc.Driver
